@@ -1,0 +1,5 @@
+dao.update(new Book("Compiler Construction", "Niklaus Wirth", "static/images/Compiler_Construction.jpg"));
+dao.update(new Book("Introduction to Algorithms", "Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, Clifford Stein", "static/images/Introduction_to_Algorithms.jpg"));
+dao.update(new Book("The Art of Computer Programming", "Donald E. Knuth", "static/images/The_art_of_Computer_Programming.jpg"));
+dao.update(new Book("The C Programming Language", "Brian W. Kernighan, Dennis Ritchie", "static/images/The_C_Programming_Language.jpg"));
+dao.update(new Book("The Implementation of Functional Programming", "Simon Peyton Jones", "static/images/The_Implementation_of_Functional_Programming.jpg"));
