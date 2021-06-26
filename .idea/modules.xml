@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/bibliothek.iml" filepath="$PROJECT_DIR$/.idea/bibliothek.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bibliothek_api/bibliothek_api.iml" filepath="$PROJECT_DIR$/bibliothek_api/bibliothek_api.iml" />
+    </modules>
+  </component>
+</project>
