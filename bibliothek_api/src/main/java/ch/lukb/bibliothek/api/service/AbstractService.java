@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public abstract class AbstractService<T> implements ServiceInterface<T> {
+public abstract class AbstractService<T>{
 
     AbstractDAO<T> dao;
 

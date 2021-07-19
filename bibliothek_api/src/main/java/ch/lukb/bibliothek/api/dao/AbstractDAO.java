@@ -6,7 +6,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional
-public abstract class AbstractDAO<T> implements DAOInterface<T>{
+public abstract class AbstractDAO<T>{
 
     @PersistenceContext
     EntityManager entityManager;

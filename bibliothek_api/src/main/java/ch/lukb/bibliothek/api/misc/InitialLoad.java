@@ -3,9 +3,11 @@ package ch.lukb.bibliothek.api.misc;
 import ch.lukb.bibliothek.api.dao.BookDAO;
 import ch.lukb.bibliothek.api.dao.BorrowDAO;
 import ch.lukb.bibliothek.api.dao.CustomerDAO;
+import ch.lukb.bibliothek.api.dao.OrderDAO;
 import ch.lukb.bibliothek.api.scheme.Book;
 import ch.lukb.bibliothek.api.scheme.Borrow;
 import ch.lukb.bibliothek.api.scheme.Customer;
+import ch.lukb.bibliothek.api.scheme.BookOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ public class InitialLoad {
     private BookDAO bookDAO;
     @Autowired
     private BorrowDAO borrowDAO;
+    @Autowired
+    private OrderDAO orderDAO;
 
     public Borrow initialLoad() {
         if(bookDAO.findAll() == null || bookDAO.findAll().isEmpty()) {
@@ -48,7 +52,10 @@ public class InitialLoad {
 
             return borrowDAO.update(borrow);
         }
+        orderDAO.update(new BookOrder(3));
+
         return null;
     }
+
 
 }
