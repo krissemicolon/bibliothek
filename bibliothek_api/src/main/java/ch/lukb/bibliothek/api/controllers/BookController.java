@@ -17,13 +17,9 @@ import java.util.List;
 public class BookController implements ControllerInterface<Book>{
 
     private BookService bookService;
-    private InitialLoad initialLoad;
-    private CustomerDAO customerDAO;
 
-    public BookController(BookService bookService, InitialLoad initialLoad, CustomerDAO customerDAO) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.initialLoad = initialLoad;
-        this.customerDAO = customerDAO;
     }
 
     @Override
