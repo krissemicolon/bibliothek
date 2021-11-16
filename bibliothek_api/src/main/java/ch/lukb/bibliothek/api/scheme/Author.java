@@ -29,4 +29,44 @@ public class Author {
     public void updateAge() {
         this.age = (short)Period.between(birthDate, LocalDate.now()).getYears();
     }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public short getAge() {
+        return age;
+    }
+
+    public void setAge(short age) {
+        this.age = age;
+    }
+
+    public String getCurriculumVitae() {
+        return curriculumVitae;
+    }
+
+    public void setCurriculumVitae(String curriculumVitae) {
+        this.curriculumVitae = curriculumVitae;
+    }
 }

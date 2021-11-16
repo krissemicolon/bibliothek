@@ -10,8 +10,6 @@ import java.util.List;
 public class AuthorController implements ControllerInterface<Author> {
     private AuthorService authorService;
 
-    public AuthorController() {}
-
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }

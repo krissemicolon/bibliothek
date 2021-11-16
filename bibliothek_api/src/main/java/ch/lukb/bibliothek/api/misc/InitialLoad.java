@@ -35,7 +35,6 @@ public class InitialLoad {
             bookDAO.update(new Book("The Art of Computer Programming", "Donald E. Knuth", "static/images/The_art_of_Computer_Programming.jpg"));
             bookDAO.update(new Book("The C Programming Language", "Brian W. Kernighan, Dennis Ritchie", "static/images/The_C_Programming_Language.jpg"));
             bookDAO.update(new Book("The Implementation of Functional Programming", "Simon Peyton Jones", "static/images/The_Implementation_of_Functional_Programming.jpg"));
-            bookDAO.update(new Book("ääüüüüäüöüöäüöüöüäöüäöäüöäüöüäöüäöüä", "Simon Peyton Jones", "static/images/The_Implementation_of_Functional_Programming.jpg"));
         }
 
         if(borrowDAO.findAll() == null || borrowDAO.findAll().isEmpty()) {
