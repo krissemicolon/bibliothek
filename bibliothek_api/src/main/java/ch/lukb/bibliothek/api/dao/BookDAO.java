@@ -5,10 +5,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BookDAO extends AbstractDAO<Book> {
-
     @Override
     protected Class<Book> getClazz() {
         return Book.class;
     }
-
 }

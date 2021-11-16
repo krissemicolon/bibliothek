@@ -3,7 +3,6 @@ package ch.lukb.bibliothek.api.controllers;
 import ch.lukb.bibliothek.api.scheme.Customer;
 import ch.lukb.bibliothek.api.service.CustomerService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
