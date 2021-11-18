@@ -1,12 +1,8 @@
 {
-  "authorFirstname" : .[0].firstName,
-  "authorLastname" : .[0].lastName,
-  "authorCV" : .[0].curriculumVitae,
-  "authorAge" : .[0].age,
-  "authorBirthDate" : .[0].birthDate,
-  "books" : [{
-    "id" : .[1].id,
-    "title" : .[1].title,
-    "coverPath" : .[1].path
-  }]
+  "bookTitle" : .book.title,
+  "bookCover" : .book.path,
+  "authorName" : .author.firstName + " " + .author.lastName,
+  "authorAge" : .author.age,
+  "authorBirthDate" : .author.birthDate,
+  "authorCurriculumVitae" : .author.curriculumVitae,
 }

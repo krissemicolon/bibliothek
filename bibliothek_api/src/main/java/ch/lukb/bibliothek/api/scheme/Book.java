@@ -9,6 +9,7 @@ public class Book {
     private Long id;
     private String title;
     private String author;
+    private Long authorId;
     private String path;
 
     @ManyToOne
@@ -16,9 +17,10 @@ public class Book {
 
     public Book() {}
 
-    public Book(String title, String author, String path) {
+    public Book(String title, String author, Long authorId, String path) {
         this.title = title;
         this.author = author;
+        this.authorId = authorId;
         this.path = path;
     }
 
@@ -52,6 +54,14 @@ public class Book {
 
     public void setBorrow(Borrow borrow) {
         this.borrow = borrow;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
     }
 
 }

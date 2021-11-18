@@ -31,6 +31,10 @@ public class Author {
         this.age = (short)Period.between(birthDate, LocalDate.now()).getYears();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
