@@ -6,16 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="bibliothek_api" />
+        <module name="bibliothek_camel" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="bibliothek_api" target="16" />
+      <module name="bibliothek_camel" target="16" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="bibliothek_api" options="-parameters" />
+      <module name="bibliothek_camel" options="-parameters" />
     </option>
   </component>
 </project>

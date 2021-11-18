@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/bibliothek.iml" filepath="$PROJECT_DIR$/.idea/bibliothek.iml" />
       <module fileurl="file://$PROJECT_DIR$/bibliothek_api/bibliothek_api.iml" filepath="$PROJECT_DIR$/bibliothek_api/bibliothek_api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bibliothek_camel/bibliothek_camel.iml" filepath="$PROJECT_DIR$/bibliothek_camel/bibliothek_camel.iml" />
     </modules>
   </component>
 </project>
