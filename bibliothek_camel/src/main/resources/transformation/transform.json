@@ -1,6 +1,7 @@
 {
   "authorFirstname" : .[0].firstName,
   "authorLastname" : .[0].lastName,
+  "authorCV" : .[0].curriculumVitae,
   "authorAge" : .[0].age,
   "authorBirthDate" : .[0].birthDate,
   "books" : [{

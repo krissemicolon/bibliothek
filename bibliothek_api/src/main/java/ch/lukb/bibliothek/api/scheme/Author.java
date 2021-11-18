@@ -14,6 +14,7 @@ public class Author {
     private String lastName;
     private LocalDate birthDate;
     private short age;
+    @Column(length=5012)
     private String curriculumVitae;
 
     public Author() {}
