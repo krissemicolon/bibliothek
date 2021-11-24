@@ -1,0 +1,13 @@
+[for (zip(.authors, .books))
+  {
+    let book = .[1]
+    let author = .[0]
+
+    "bookTitle" : $book.title,
+    "bookCover" : $book.path,
+    "authorName" : $author.firstName + " " + $author.lastName,
+    "authorAge" : $author.age,
+    "authorBirthDate" : $author.birthDate,
+    "authorCurriculumVitae" : $author.curriculumVitae,
+  }
+]

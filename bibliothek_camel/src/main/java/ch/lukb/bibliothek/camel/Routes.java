@@ -14,7 +14,30 @@ public class Routes extends RouteBuilder {
         from("timer: //runOnce?repeatCount=1&delay=500")
                 .to("http://localhost:8080/initial");
 
-        from("undertow:http://0.0.0.0:19000/books/{bookID}")
+        from("undertow:http://0.0.0.0:19000/books")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+
+
+                .removeHeader(Exchange.HTTP_URI)
+                .to("direct:books-call")
+                .setProperty("books").simple("${body}")
+
+                .removeHeader(Exchange.HTTP_URI)
+                .to("direct:authors-call")
+                .setProperty("authors").simple("${body}")
+
+                .setBody(
+                        simple("""
+                                {
+                                    "authors": ${exchangeProperty.authors},
+                                    "books": ${exchangeProperty.books}
+                                }
+                                """
+                        )
+                )
+                .to("jslt:transformation/multiple.json");
+
+        from("undertow:http://0.0.0.0:19000/book/{bookID}")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
 
                 // book call
@@ -40,7 +63,7 @@ public class Routes extends RouteBuilder {
                                 }
                                 """)
                 )
-                .to("jslt:transformation/transform.json");
+                .to("jslt:transformation/single.json");
 
         // api calls
         from("direct:book-call")
@@ -48,6 +71,12 @@ public class Routes extends RouteBuilder {
 
         from("direct:author-call")
                 .toD("http://localhost:8080/author/${exchangeProperty.authorId}");
+
+        from("direct:books-call")
+                .to("http://localhost:8080/books");
+
+        from("direct:authors-call")
+                .to("http://localhost:8080/authors");
 
     }
 
