@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.schibsted.spt.data:jslt:0.1.11">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/schibsted/spt/data/jslt/0.1.11/jslt-0.1.11.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/schibsted/spt/data/jslt/0.1.11/jslt-0.1.11-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/schibsted/spt/data/jslt/0.1.11/jslt-0.1.11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

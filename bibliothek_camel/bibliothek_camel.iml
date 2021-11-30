@@ -37,14 +37,13 @@
     <orderEntry type="library" name="Maven: org.apache.camel:camel-bean:3.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-actuator:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot:2.5.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.camel.springboot:camel-jslt-starter:3.7.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.camel:camel-jslt:3.7.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.camel:camel-jslt:3.11.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.camel:camel-support:3.7.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.camel:camel-management-api:3.7.4" level="project" />
-    <orderEntry type="library" name="Maven: com.schibsted.spt.data:jslt:0.1.10" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.3" level="project" />
+    <orderEntry type="library" name="Maven: com.schibsted.spt.data:jslt:0.1.11" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.0" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.0" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.3" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.11.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.5.13" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.4.14" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />

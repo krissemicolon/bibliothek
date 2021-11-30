@@ -1,8 +1,14 @@
 package ch.lukb.bibliothek.camel;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
 import org.apache.camel.Exchange;
+import com.jayway.jsonpath.JsonPath;
 
 @Component
 public class Routes extends RouteBuilder {
@@ -14,9 +20,45 @@ public class Routes extends RouteBuilder {
         from("timer: //runOnce?repeatCount=1&delay=500")
                 .to("http://localhost:8080/initial");
 
+
         from("undertow:http://0.0.0.0:19000/books")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
 
+                // get all books
+                .removeHeader(Exchange.HTTP_URI)
+                .to("direct:books-call")
+                .convertBodyTo(String.class)
+                .setProperty("books").simple("${body}")
+
+                // get all required authors
+                .process(exchange -> {
+                    ProducerTemplate template = exchange.getContext().createProducerTemplate();
+
+                    List<Integer> authorIds = ((List<?>) JsonPath.read(exchange.getProperty("books"), "$[*].authorId"))
+                            .stream()
+                            .map(x -> (Integer) x)
+                            .distinct()
+                            .collect(Collectors.toList());
+
+                    Map<Integer, String> authors = new HashMap<>();
+
+                    // calling author api & storing in hashtable
+                    for(Integer authorId : authorIds) {
+                        template.requestBody("direct:get-author", authorId.toString());
+                        authors.put(authorId, exchange.getIn().getBody().toString());
+                    }
+                    exchange.setProperty("authors", authors);
+                    exchange.getIn().setBody(exchange.getProperty("authors", HashMap.class).get(1));
+                });
+
+        from("direct:get-author")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .removeHeader(Exchange.HTTP_URI)
+                .toD("http://localhost:8080/author/${body}");
+
+
+        from("undertow:http://0.0.0.0:19000/booksZip")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
 
                 .removeHeader(Exchange.HTTP_URI)
                 .to("direct:books-call")
@@ -35,7 +77,8 @@ public class Routes extends RouteBuilder {
                                 """
                         )
                 )
-                .to("jslt:transformation/multiple.json");
+                .to("jslt:transformation/multiple_zip.json");
+
 
         from("undertow:http://0.0.0.0:19000/book/{bookID}")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
@@ -64,6 +107,7 @@ public class Routes extends RouteBuilder {
                                 """)
                 )
                 .to("jslt:transformation/single.json");
+
 
         // api calls
         from("direct:book-call")
