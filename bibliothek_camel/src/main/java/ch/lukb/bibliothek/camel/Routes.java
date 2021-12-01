@@ -2,10 +2,8 @@ package ch.lukb.bibliothek.camel;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
-import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
 import org.apache.camel.Exchange;
 import com.jayway.jsonpath.JsonPath;
@@ -34,22 +32,27 @@ public class Routes extends RouteBuilder {
                 .process(exchange -> {
                     ProducerTemplate template = exchange.getContext().createProducerTemplate();
 
-                    List<Integer> authorIds = ((List<?>) JsonPath.read(exchange.getProperty("books"), "$[*].authorId"))
-                            .stream()
-                            .map(x -> (Integer) x)
+                    // initializing authors map with keys of required author ids from books api call
+                    HashMap<Integer, String> authors = ((HashMap<Integer, String>) ((List<Integer>) JsonPath.parse((String) exchange.getProperty("books")).read("$[*].authorId"))
+                            .parallelStream() // parallelized version else: .stream()
                             .distinct()
-                            .collect(Collectors.toList());
+                            .collect(Collectors.toMap(k -> k, v -> new String())));
 
-                    Map<Integer, String> authors = new HashMap<>();
+                    // filling authors map with values of required authors
+                    authors.forEach((k, v) -> authors.put(k, template.requestBody("direct:get-author", k.toString(), String.class)));
 
-                    // calling author api & storing in hashtable
-                    for(Integer authorId : authorIds) {
-                        template.requestBody("direct:get-author", authorId.toString());
-                        authors.put(authorId, exchange.getIn().getBody().toString());
-                    }
+                    authors.forEach((k, v) -> {
+                        System.out.println("-----------------------------------");
+                        System.out.println("Key: " + k + ", Value: " + v);
+                        System.out.println("-----------------------------------");
+                    });
+
                     exchange.setProperty("authors", authors);
-                    exchange.getIn().setBody(exchange.getProperty("authors", HashMap.class).get(1));
+
+                    //exchange.getIn().setBody(exchange.getProperty("authors", HashMap.class).get(1));
+                    exchange.getIn().setBody("placeholder");
                 });
+
 
         from("direct:get-author")
                 .setHeader(Exchange.HTTP_METHOD, constant("GET"))
