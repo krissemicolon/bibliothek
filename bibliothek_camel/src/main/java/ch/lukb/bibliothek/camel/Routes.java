@@ -2,6 +2,17 @@ package ch.lukb.bibliothek.camel;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.spi.json.GsonJsonProvider;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
 import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
@@ -31,33 +42,58 @@ public class Routes extends RouteBuilder {
                 // get all required authors
                 .process(exchange -> {
                     ProducerTemplate template = exchange.getContext().createProducerTemplate();
+                    ObjectMapper mapper = new ObjectMapper();
+
+                    // split books into List of Strings
+                    List<String> books = StreamSupport.stream(new ObjectMapper().readTree((String) exchange.getProperty("books")).spliterator(), false)
+                            .map(JsonNode::toString)
+                            .collect(Collectors.toList());
 
                     // initializing authors map with keys of required author ids from books api call
-                    HashMap<Integer, String> authors = ((HashMap<Integer, String>) ((List<Integer>) JsonPath.parse((String) exchange.getProperty("books")).read("$[*].authorId"))
-                            .parallelStream() // parallelized version else: .stream()
+                    HashMap<Integer, String> authors = (HashMap<Integer, String>) ((List<Integer>) JsonPath.parse((String) exchange.getProperty("books")).read("$[*].authorId"))
+                            .parallelStream() // parallelized version. for sequential use: .stream()
                             .distinct()
-                            .collect(Collectors.toMap(k -> k, v -> new String())));
+                            .collect(Collectors.toMap(k -> k, v -> new String()));
 
                     // filling authors map with values of required authors
                     authors.forEach((k, v) -> authors.put(k, template.requestBody("direct:get-author", k.toString(), String.class)));
 
-                    authors.forEach((k, v) -> {
-                        System.out.println("-----------------------------------");
-                        System.out.println("Key: " + k + ", Value: " + v);
-                        System.out.println("-----------------------------------");
-                    });
-
                     exchange.setProperty("authors", authors);
 
-                    //exchange.getIn().setBody(exchange.getProperty("authors", HashMap.class).get(1));
-                    exchange.getIn().setBody("placeholder");
-                });
+                    List<String> transformed = new ArrayList<>();
 
+                    // TODO: Optimize with LinkedHashMap by utilizing insertion order
+                    for(String book : books) {
+                        transformed.add((String) template.requestBody(
+                                "jslt:transformation/single.json",
+                                String.format("""
+                                {
+                                    "author": %s,
+                                    "book": %s
+                                }
+                                """, authors.get(((Integer) JsonPath.parse((String) book).read("$.authorId"))), book),
+                                String.class
+                        ));
+                    }
 
-        from("direct:get-author")
-                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
-                .removeHeader(Exchange.HTTP_URI)
-                .toD("http://localhost:8080/author/${body}");
+                    // TODO: Create Lambda Wrapper for Exception Handling
+                    String transformedJSON = mapper.createArrayNode().addAll(
+                            transformed
+                                    .stream()
+                                    .map(x -> {
+                                        try {
+                                            return mapper.readTree(x);
+                                        } catch (JsonProcessingException e) {
+                                            e.printStackTrace();
+                                        }
+                                        return null;
+                                    })
+                                    .collect(Collectors.toList())
+                    ).toString();
+
+                    exchange.setProperty("transformed", transformedJSON);
+                })
+                .setBody(simple("${exchangeProperty.transformed}"));
 
 
         from("undertow:http://0.0.0.0:19000/booksZip")
@@ -80,7 +116,7 @@ public class Routes extends RouteBuilder {
                                 """
                         )
                 )
-                .to("jslt:transformation/multiple_zip.json");
+                .to("jslt:transformation/multipleZip.json");
 
 
         from("undertow:http://0.0.0.0:19000/book/{bookID}")
@@ -116,15 +152,22 @@ public class Routes extends RouteBuilder {
         from("direct:book-call")
                 .toD("http://localhost:8080/book/${header.bookId}");
 
+
         from("direct:author-call")
                 .toD("http://localhost:8080/author/${exchangeProperty.authorId}");
+
 
         from("direct:books-call")
                 .to("http://localhost:8080/books");
 
+
         from("direct:authors-call")
                 .to("http://localhost:8080/authors");
 
-    }
 
+        from("direct:get-author")
+                .setHeader(Exchange.HTTP_METHOD, constant("GET"))
+                .removeHeader(Exchange.HTTP_URI)
+                .toD("http://localhost:8080/author/${body}");
+    }
 }
